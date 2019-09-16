@@ -69,15 +69,6 @@ def validar_columnas(tablero, numero, posicion):
 
 def validar_cuadrante(tablero, numero, posicion):
 
-    # # Check box
-    # box_x = pos[1] // 3
-    # box_y = pos[0] // 3
-    #
-    # for i in range(box_y*3, box_y*3 + 3):
-    #     for j in range(box_x * 3, box_x*3 + 3):
-    #         if bo[i][j] == num and (i,j) != pos:
-    #             return False
-    # return True
     cuadrante_x = posicion[1] // 3
     cuadrante_y = posicion[0] // 3
 
