@@ -1,5 +1,5 @@
 import math
-
+import csv
 
 # tablero = [
 #     [7, 8, 0, 4, 0, 0, 1, 2, 0],
@@ -34,11 +34,10 @@ tablero = [
 
 ]
 
+
 def imprimir_tablero(tablero):
     longitud_tablero = len(tablero)
     longitud_cuadrante = int(math.sqrt(longitud_tablero))
-
-    print(longitud_cuadrante)
 
     for numero_fila in range(longitud_tablero):
         # cada 3 filas imprime una linea horizontal
@@ -76,13 +75,15 @@ def validar(tablero, numero, posicion):
             & validar_columnas(tablero, numero, posicion)
             & validar_cuadrante(tablero, numero, posicion))
 
-#bien
+
+# bien
 def validar_filas(tablero, numero, posicion):
     longitud_tablero = len(tablero)
     for fila in range(longitud_tablero):
         if tablero[posicion[0]][fila] == numero and posicion[1] != fila:
             return False
     return True
+
 
 # bien
 def validar_columnas(tablero, numero, posicion):
@@ -101,7 +102,8 @@ def validar_cuadrante(tablero, numero, posicion):
     posicion_fila = posicion[0] // longitud_cuadrante
 
     for fila in range(posicion_fila * longitud_cuadrante, posicion_fila * longitud_cuadrante + longitud_cuadrante):
-        for columna in range(posicion_columna * longitud_cuadrante, posicion_columna * longitud_cuadrante + longitud_cuadrante):
+        for columna in range(posicion_columna * longitud_cuadrante,
+                             posicion_columna * longitud_cuadrante + longitud_cuadrante):
             if tablero[fila][columna] == numero and (fila, columna) != posicion:
                 return False
     return True
@@ -119,7 +121,7 @@ def resolver(tablero):
     for numero_a_probar in range(1, longitud_tablero + 1):
         if validar(tablero, numero_a_probar, (fila, columna)):
             tablero[fila][columna] = numero_a_probar
-
+            escribir_csv(tablero)
             if resolver(tablero):
                 return True
             tablero[fila][columna] = 0
@@ -127,7 +129,26 @@ def resolver(tablero):
     return False
 
 
-imprimir_tablero(tablero)
+def leer_csv(archivo_csv_importado):
+    tablero_csv = []
+    with open(archivo_csv_importado, "r") as archivo_csv:
+        # Creamos la lista de listas separando cada valor por ","
+        csv_reader = csv.reader(archivo_csv, delimiter=',')
+        # Borramos los espacios en blanco
+        str(csv_reader).strip()
+        for fila in csv_reader:
+            tablero_csv.append(fila)
+    return tablero
+
+
+def escribir_csv(tablero):
+    with open('csv_resultado.csv', 'w') as archivo_csv:
+        for line in tablero:
+            archivo_csv.write(str(line))
+            archivo_csv.write('\n')
+
+
+imprimir_tablero(leer_csv("tablero.csv"))
 resolver(tablero)
 print("************************************")
 imprimir_tablero(tablero)
