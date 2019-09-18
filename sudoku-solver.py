@@ -15,10 +15,22 @@ import math
 
 
 tablero = [
-    [7, 8, 0, 4],
-    [6, 0, 0, 0],
-    [0, 0, 0, 6],
-    [0, 0, 7, 0],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 
 ]
 
@@ -31,7 +43,7 @@ def imprimir_tablero(tablero):
     for numero_fila in range(longitud_tablero):
         # cada 3 filas imprime una linea horizontal
         if numero_fila % longitud_cuadrante == 0 and numero_fila != 0:
-            print("- - - " * (longitud_cuadrante))
+            print("- - - " * longitud_cuadrante)
 
         for numero_columna in range(longitud_tablero):
             # cada 3 columnas imprime un pipe formando una linea horizontal
@@ -82,25 +94,29 @@ def validar_columnas(tablero, numero, posicion):
 
 
 def validar_cuadrante(tablero, numero, posicion):
+    longitud_tablero = len(tablero)
+    longitud_cuadrante = int(math.sqrt(longitud_tablero))
 
-    posicion_columna = posicion[1] // 3
-    posicion_fila = posicion[0] // 3
+    posicion_columna = posicion[1] // longitud_cuadrante
+    posicion_fila = posicion[0] // longitud_cuadrante
 
-    for fila in range(posicion_fila * 3, posicion_fila * 3 + 3):
-        for columna in range(posicion_columna * 3, posicion_columna * 3 + 3):
+    for fila in range(posicion_fila * longitud_cuadrante, posicion_fila * longitud_cuadrante + longitud_cuadrante):
+        for columna in range(posicion_columna * longitud_cuadrante, posicion_columna * longitud_cuadrante + longitud_cuadrante):
             if tablero[fila][columna] == numero and (fila, columna) != posicion:
                 return False
     return True
 
 
 def resolver(tablero):
+    longitud_tablero = len(tablero)
+    # longitud_cuadrante = int(math.sqrt(longitud_tablero))
     posicion_casillero_vacio = buscar_vacios(tablero)
     if not posicion_casillero_vacio:
         return True
     else:
         fila, columna = posicion_casillero_vacio
 
-    for numero_a_probar in range(1, 10):
+    for numero_a_probar in range(1, longitud_tablero + 1):
         if validar(tablero, numero_a_probar, (fila, columna)):
             tablero[fila][columna] = numero_a_probar
 
@@ -112,6 +128,6 @@ def resolver(tablero):
 
 
 imprimir_tablero(tablero)
-# resolver(tablero)
-# print("************************************")
-# imprimir_tablero(tablero)
+resolver(tablero)
+print("************************************")
+imprimir_tablero(tablero)
