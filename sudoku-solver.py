@@ -2,40 +2,6 @@ import math
 import csv
 from time import time
 
-# tablero = [
-#     [7, 8, 0, 4, 0, 0, 1, 2, 0],
-#     [6, 0, 0, 0, 7, 5, 0, 0, 9],
-#     [0, 0, 0, 6, 0, 1, 0, 7, 8],
-#     [0, 0, 7, 0, 4, 0, 2, 6, 0],
-#     [0, 0, 1, 0, 5, 0, 9, 3, 0],
-#     [9, 0, 4, 0, 6, 0, 0, 0, 5],
-#     [0, 7, 0, 3, 0, 0, 0, 1, 2],
-#     [1, 2, 0, 0, 0, 7, 4, 0, 0],
-#     [0, 4, 9, 2, 0, 6, 0, 0, 7],
-# ]
-
-
-tablero = [
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-
-]
-
-
 def imprimir_tablero(tablero):
     longitud_tablero = len(tablero)
     longitud_cuadrante = int(math.sqrt(longitud_tablero))
@@ -112,7 +78,6 @@ def validar_cuadrante(tablero, numero, posicion):
 
 def resolver(tablero):
     longitud_tablero = len(tablero)
-    # longitud_cuadrante = int(math.sqrt(longitud_tablero))
     posicion_casillero_vacio = buscar_vacios(tablero)
     if not posicion_casillero_vacio:
         return True
@@ -123,6 +88,8 @@ def resolver(tablero):
         if validar(tablero, numero_a_probar, (fila, columna)):
             tablero[fila][columna] = numero_a_probar
             escribir_csv(tablero)
+            if numero_a_probar == 3:
+                break
             if resolver(tablero):
                 return True
             tablero[fila][columna] = 0
@@ -135,28 +102,39 @@ def leer_csv(archivo_csv_importado):
     with open(archivo_csv_importado, "r") as archivo_csv:
         # Creamos la lista de listas separando cada valor por ","
         csv_reader = csv.reader(archivo_csv, delimiter=',')
-        # Borramos los espacios en blanco
-        str(csv_reader).strip()
-        for fila in csv_reader:
-            tablero_csv.append(fila)
-    return tablero
 
-def recuperar(archivo_csv_importado):
-    leer_csv()
+        tablero_csv = [[int(numero) for numero in lista] for lista in csv_reader]
+
+    return tablero_csv
+
+
+
 
 def escribir_csv(tablero):
-    with open('csv_resultado.csv', 'w') as archivo_csv:
-        for line in tablero:
-            archivo_csv.write(str(line))
-            archivo_csv.write('\n')
+    with open('csv_resultado.csv', 'w', newline="") as archivo_csv:
+        writer = csv.writer(archivo_csv)
+        writer.writerows(tablero)
 
-imprimir_tablero(leer_csv("tablero.csv"))
+def resolver_desde_cero():
+    imprimir_tablero(leer_csv("tablero.csv"))
+    tiempo_inicial = time()
+    resolver(leer_csv("tablero.csv"))
+    tiempo_final = time()
+    print("************************************")
+    imprimir_tablero(leer_csv("tablero.csv"))
+    # print(tiempo_final-tiempo_inicial)
 
-imprimir_tablero(tablero)
-tiempo_inicial = time()
-resolver(tablero)
-tiempo_final = time()
-print("************************************")
-imprimir_tablero(tablero)
-print(tiempo_final-tiempo_inicial)
 
+def resolver_recuperando():
+    imprimir_tablero(leer_csv("csv_resultado.csv"))
+    tiempo_inicial = time()
+    resolver(leer_csv("csv_resultado.csv"))
+    tiempo_final = time()
+    print("************************************")
+    imprimir_tablero(leer_csv("csv_resultado.csv"))
+    # print(tiempo_final-tiempo_inicial)
+
+
+resolver(leer_csv("csv_resultado.csv"))
+
+# Tamaño fuera de rango, vacio, numero fuera de rango, caracter invalido, archivo inexistente,
