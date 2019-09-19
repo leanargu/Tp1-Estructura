@@ -1,5 +1,6 @@
 import math
 import csv
+from time import time
 
 # tablero = [
 #     [7, 8, 0, 4, 0, 0, 1, 2, 0],
@@ -140,6 +141,8 @@ def leer_csv(archivo_csv_importado):
             tablero_csv.append(fila)
     return tablero
 
+def recuperar(archivo_csv_importado):
+    leer_csv()
 
 def escribir_csv(tablero):
     with open('csv_resultado.csv', 'w') as archivo_csv:
@@ -147,8 +150,13 @@ def escribir_csv(tablero):
             archivo_csv.write(str(line))
             archivo_csv.write('\n')
 
-
 imprimir_tablero(leer_csv("tablero.csv"))
+
+imprimir_tablero(tablero)
+tiempo_inicial = time()
 resolver(tablero)
+tiempo_final = time()
 print("************************************")
 imprimir_tablero(tablero)
+print(tiempo_final-tiempo_inicial)
+
